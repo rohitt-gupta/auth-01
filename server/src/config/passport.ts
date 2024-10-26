@@ -1,6 +1,7 @@
 import passport from 'passport';
 import { Strategy as GoogleStrategy, Profile, VerifyCallback } from "passport-google-oauth20";
 import { Strategy as LocalStrategy } from "passport-local";
+import { Strategy as OutlookStrategy } from "passport-outlook2";
 import User, { IUser } from '../models/users';
 import dotenv from "dotenv";
 import { Express } from 'express';
@@ -37,6 +38,33 @@ passport.use(new GoogleStrategy({
   },
 
 ));
+
+// Add Outlook Strategy
+if (!process.env.OUTLOOK_CLIENT_ID || !process.env.OUTLOOK_CLIENT_SECRET) {
+  throw new Error('Missing Outlook OAuth credentials');
+}
+
+passport.use(new OutlookStrategy({
+  clientID: process.env.OUTLOOK_CLIENT_ID,
+  clientSecret: process.env.OUTLOOK_CLIENT_SECRET,
+  callbackURL: "http://localhost:3000/auth/outlook/callback"
+},
+  async (accessToken: string, refreshToken: string, profile: any, done: VerifyCallback) => {
+    try {
+      let user = await User.findOne({ outlookId: profile.id });
+      if (!user) {
+        user = await User.create({
+          outlookId: profile.id,
+          name: profile.displayName,
+          email: profile.emails[0].value,
+          password: 'password', // You might want to generate a random password here
+        });
+      }
+      return done(null, user);
+    } catch (error) {
+      return done(error as Error);
+    }
+  }));
 
 passport.use(new LocalStrategy({
   usernameField: 'email',

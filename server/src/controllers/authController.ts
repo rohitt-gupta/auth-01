@@ -52,5 +52,10 @@ export const authController = {
       }
       res.json({ message: 'Logged out successfully' });
     });
+  },
+
+  outlookCallback: (req: Request, res: Response) => {
+    const frontendURL = process.env.FRONTEND_URL || 'http://localhost:5173';
+    res.redirect(`${frontendURL}/profile`);
   }
 };

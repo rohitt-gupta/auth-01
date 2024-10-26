@@ -46,6 +46,10 @@ class AuthService {
   async updateUserProfile(data: UserProfile): Promise<void> {
     await this.axios.post('/user/update-profile', data);
   }
+
+  async loginWithOutlook(): Promise<void> {
+    window.location.href = `${BASE_URL}/auth/outlook`;
+  }
 }
 
 const authService = new AuthService(axiosInstance);

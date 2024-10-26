@@ -28,4 +28,11 @@ router.get('/logout', (req, res) => {
   });
 });
 
+router.get('/outlook', passport.authenticate('outlook', { scope: ['openid', 'profile', 'email'] }));
+
+router.get('/outlook/callback',
+  passport.authenticate('outlook', { failureRedirect: '/login' }),
+  authController.outlookCallback
+);
+
 export default router;

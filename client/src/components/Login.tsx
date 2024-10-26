@@ -27,6 +27,10 @@ const Login: React.FC = () => {
     authService.loginWithGoogle();
   };
 
+  const handleOutlookLogin = () => {
+    authService.loginWithOutlook();
+  };
+
   return (
     <div className="flex flex-col justify-center items-center bg-gray-900 min-h-screen">
       <div className="bg-gray-800 shadow-md p-6 rounded-lg w-full max-w-md">
@@ -55,6 +59,9 @@ const Login: React.FC = () => {
         </form>
         <button onClick={handleGoogleLogin} className="bg-red-600 hover:bg-red-700 mt-4 px-4 py-2 rounded-md w-full transition duration-200">
           Sign in with Google
+        </button>
+        <button onClick={handleOutlookLogin} className="bg-blue-600 hover:bg-blue-700 mt-4 px-4 py-2 rounded-md w-full transition duration-200">
+          Sign in with Outlook
         </button>
         <button onClick={() => navigate('/register')} className="bg-gray-600 hover:bg-gray-700 mt-4 px-4 py-2 rounded-md w-full transition duration-200">
           Sign up

@@ -2,7 +2,8 @@ import mongoose, { Document, Schema } from "mongoose";
 import bcrypt from 'bcrypt';
 
 export interface IUser extends Document {
-  googleId: string;
+  googleId?: string;
+  outlookId?: string;
   name: string;
   email: string;
   password?: string;
@@ -18,7 +19,11 @@ const userSchema: Schema = new Schema({
     unique: true,
     sparse: true
   },
-
+  outlookId: {
+    type: String,
+    unique: true,
+    sparse: true
+  },
   name: String,
   email: {
     type: String,
