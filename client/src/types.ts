@@ -14,7 +14,6 @@ export interface RegisterData {
 }
 
 export interface UpdatePasswordData {
-  currentPassword: string;
   newPassword: string;
 }
 

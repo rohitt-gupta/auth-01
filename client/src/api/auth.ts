@@ -5,7 +5,7 @@ import { BASE_URL } from '../constants';
 
 
 class AuthService {
-  private axios;
+  private readonly axios: Axios;
 
   constructor(axiosInstance: Axios) {
     this.axios = axiosInstance;

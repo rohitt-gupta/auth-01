@@ -7,11 +7,11 @@ import { AxiosError } from 'axios';
 
 const Profile: React.FC = () => {
   const [user, setUser] = useState<UserProfile | null>(null);
-  const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const navigate = useNavigate();
+  const [confirmNewPassword, setConfirmNewPassword] = useState('');
 
   useEffect(() => {
     fetchProfile();
@@ -30,10 +30,14 @@ const Profile: React.FC = () => {
   const handleUpdatePassword = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await authService.updatePassword({ currentPassword, newPassword });
+      if (newPassword !== confirmNewPassword) {
+        setError('Passwords do not match');
+        return;
+      }
+      await authService.updatePassword({ newPassword });
       setSuccessMessage('Password updated successfully');
-      setCurrentPassword('');
       setNewPassword('');
+      setConfirmNewPassword('');
       setError('');
     } catch (error) {
       if (error instanceof AxiosError && error.response) {
@@ -62,6 +66,9 @@ const Profile: React.FC = () => {
         <h2 className="mb-6 font-bold text-2xl text-center">Profile</h2>
         <p className="mb-2">Name: {user.name}</p>
         <p className="mb-4">Email: {user.email}</p>
+        {user.age && <p className="mb-4">Age: {user.age}</p>}
+        {user.gender && <p className="mb-4">Gender: {user.gender}</p>}
+        {user.dob && <p className="mb-4">Date of Birth: {user.dob}</p>}
 
         <h3 className="mb-4 font-semibold text-xl">Update Password</h3>
         {error && <p className="mb-4 text-red-500">{error}</p>}
@@ -69,17 +76,17 @@ const Profile: React.FC = () => {
         <form onSubmit={handleUpdatePassword} className="space-y-4">
           <input
             type="password"
-            value={currentPassword}
-            onChange={(e) => setCurrentPassword(e.target.value)}
-            placeholder="Current Password"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            placeholder="New Password"
             required
             className="border-gray-600 bg-gray-700 px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 w-full focus:outline-none"
           />
           <input
             type="password"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-            placeholder="New Password"
+            value={confirmNewPassword}
+            onChange={(e) => setConfirmNewPassword(e.target.value)}
+            placeholder="Confirm New Password"
             required
             className="border-gray-600 bg-gray-700 px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 w-full focus:outline-none"
           />

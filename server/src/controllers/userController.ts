@@ -17,16 +17,11 @@ export const updatePassword = async (req: Request, res: Response, next: NextFunc
   }
 
   try {
-    const { currentPassword, newPassword } = req.body;
+    const { newPassword } = req.body;
     const user = await User.findById((req.user as IUser)._id);
 
     if (!user) {
       return next(new Error('User not found'));
-    }
-
-    const isMatch = await user.comparePassword(currentPassword);
-    if (!isMatch) {
-      return next(new Error('Current password is incorrect'));
     }
 
     user.password = newPassword;

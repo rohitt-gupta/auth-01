@@ -3,13 +3,12 @@ import { Strategy as GoogleStrategy, Profile, VerifyCallback } from "passport-go
 import { Strategy as LocalStrategy } from "passport-local";
 import User, { IUser } from '../models/users';
 import dotenv from "dotenv";
-import { Express } from 'express';
+import { generateRandomPassword } from '../utils';
 
 dotenv.config();
 
 // console.log("GOOGLE_CLIENT_ID", process.env.GOOGLE_CLIENT_ID);
 // console.log("GOOGLE_CLIENT_SECRET", process.env.GOOGLE_CLIENT_SECRET);
-// Ensure environment variables are set
 if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
   throw new Error('Missing Google OAuth credentials');
 }
@@ -27,7 +26,7 @@ passport.use(new GoogleStrategy({
           googleId: profile.id,
           name: profile.displayName,
           email: profile.emails?.[0].value,
-          password: 'password',
+          password: generateRandomPassword(),
         });
       }
       return done(null, user);
