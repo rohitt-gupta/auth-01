@@ -16,7 +16,7 @@ if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
 passport.use(new GoogleStrategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-  callbackURL: "http://localhost:3000/auth/google/callback"
+  callbackURL: process.env.GOOGLE_CALLBACK_URL
 },
   async (accessToken: string, refreshToken: string, profile: Profile, done: VerifyCallback) => {
     try {
@@ -57,18 +57,14 @@ passport.use(new LocalStrategy({
 }));
 
 passport.serializeUser((user: Express.User, done) => {
-  console.log("Serializing user:", user);
   done(null, (user as IUser)._id);
 });
 
 passport.deserializeUser(async (id: string, done) => {
-  console.log("Deserializing user with id:", id);
   try {
     const user = await User.findById(id);
-    console.log("Deserialized user:", user);
     done(null, user);
   } catch (error) {
-    console.error("Error deserializing user:", error);
     done(error);
   }
 });
