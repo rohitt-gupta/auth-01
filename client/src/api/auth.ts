@@ -42,6 +42,10 @@ class AuthService {
     const response = await this.axios.get<SessionResponse>('/user/session');
     return response.data;
   }
+
+  async updateUserProfile(data: UserProfile): Promise<void> {
+    await this.axios.post('/user/update-profile', data);
+  }
 }
 
 const authService = new AuthService(axiosInstance);

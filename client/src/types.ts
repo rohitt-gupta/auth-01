@@ -22,6 +22,9 @@ export interface UserProfile {
   id: string;
   name: string;
   email: string;
+  gender: string;
+  age: number;
+  dob: string;
 }
 
 export interface ProfileResponse {

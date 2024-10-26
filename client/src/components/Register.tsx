@@ -4,16 +4,25 @@ import authService from '../api/auth';
 import { AxiosError } from 'axios';
 
 const Register: React.FC = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    gender: '',
+    age: '',
+    dob: ''
+  });
   const [error, setError] = useState('');
   const navigate = useNavigate();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await authService.registerWithEmailPassword({ name, email, password });
+      await authService.registerWithEmailPassword(formData);
       navigate('/profile');
     } catch (error) {
       if (error instanceof AxiosError && error.response) {
@@ -32,25 +41,55 @@ const Register: React.FC = () => {
         <form onSubmit={handleRegister} className="space-y-4">
           <input
             type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
             placeholder="Name"
             required
             className="border-gray-600 bg-gray-700 px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 w-full focus:outline-none"
           />
           <input
             type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
             placeholder="Email"
             required
             className="border-gray-600 bg-gray-700 px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 w-full focus:outline-none"
           />
           <input
             type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
             placeholder="Password"
+            required
+            className="border-gray-600 bg-gray-700 px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 w-full focus:outline-none"
+          />
+          <input
+            type="text"
+            name="gender"
+            value={formData.gender}
+            onChange={handleChange}
+            placeholder="Gender"
+            required
+            className="border-gray-600 bg-gray-700 px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 w-full focus:outline-none"
+          />
+          <input
+            type="number"
+            name="age"
+            value={formData.age}
+            onChange={handleChange}
+            placeholder="Age"
+            required
+            className="border-gray-600 bg-gray-700 px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 w-full focus:outline-none"
+          />
+          <input
+            type="date"
+            name="dob"
+            value={formData.dob}
+            onChange={handleChange}
+            placeholder="Date of Birth"
             required
             className="border-gray-600 bg-gray-700 px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 w-full focus:outline-none"
           />

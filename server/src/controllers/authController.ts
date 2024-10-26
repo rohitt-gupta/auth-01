@@ -4,20 +4,18 @@ import passport from 'passport';
 
 export const authController = {
   googleCallback: (req: Request, res: Response) => {
-    // Assuming the frontend is running on a different port or domain
-    console.log(process.env.FRONTEND_URL);
     const frontendURL = process.env.FRONTEND_URL || 'http://localhost:5173';
     res.redirect(`${frontendURL}/profile`);
   },
 
   register: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { name, email, password } = req.body;
+      const { name, email, password, gender, age, dob } = req.body;
       const existingUser = await User.findOne({ email });
       if (existingUser) {
         return next(new Error('Email already in use'));
       }
-      const user = new User({ name, email, password });
+      const user = new User({ name, email, password, gender, age, dob });
       await user.save();
       req.login(user, (err) => {
         if (err) {
